@@ -1,6 +1,7 @@
 from fastapi import FastAPI,Depends,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+from collections import defaultdict
+from datetime import timedelta
 import joblib
 from schemas import PredictionRequest , WorkoutResponse , PredictionResponse
 import pandas as pd
@@ -168,3 +169,22 @@ def get_workout(
             detail = "Workout not found"
         )
     return workout
+@app.get("/stats/weekly")
+def weekly_stats(db: Session = Depends(get_db)):
+    workouts = db.query(Workout).all()
+    totals = defaultdict(lambda: {"calories": 0.0, "workouts": 0})
+
+    for w in workouts:
+        # Monday of the workout's week
+        monday = (w.created_at - timedelta(days=w.created_at.weekday())).date()
+        totals[monday]["calories"] += w.Calories or 0
+        totals[monday]["workouts"] += 1
+
+    return [
+        {
+            "week": str(week),
+            "calories": round(v["calories"], 2),
+            "workouts": v["workouts"],
+        }
+        for week, v in sorted(totals.items())
+    ]
