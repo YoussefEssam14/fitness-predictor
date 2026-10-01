@@ -1,4 +1,6 @@
 from fastapi import FastAPI,Depends,HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 import joblib
 from schemas import PredictionRequest , WorkoutResponse , PredictionResponse
 import pandas as pd
@@ -14,6 +16,12 @@ from typing import List
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vite's default port
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 Base.metadata.create_all(bind=engine)
 
 with open("model_info.json") as f:
