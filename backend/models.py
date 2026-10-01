@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, Float, String
+from datetime import datetime
+
+from sqlalchemy import Column, Integer, Float, String, DateTime
 from database import Base
 
 
@@ -17,3 +19,5 @@ class Workout(Base):
     Gender = Column(String)
 
     Calories = Column(Float)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
