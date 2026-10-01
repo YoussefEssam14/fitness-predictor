@@ -1,0 +1,17 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+node_modules/
+dist/
+
+.env
+*.db
+
+ml/data/
+
+.ipynb_checkpoints/
+
+.DS_Store
+.vscode/
