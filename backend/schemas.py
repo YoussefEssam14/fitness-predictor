@@ -1,26 +1,31 @@
-from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class PredictionRequest(BaseModel):
-    Age: int = Field(..., ge=10, le=100)
-    Height: float = Field(..., ge=100, le=250)
-    Weight: float = Field(..., ge=30, le=300)
-    Duration: float = Field(..., ge=1, le=300)
-    Heart_Rate: float = Field(..., ge=40, le=220)
-    Gender: str
+    Age: int = Field(..., ge=20, le=79)
+    Height: float = Field(..., ge=123, le=222)
+    Weight: float = Field(..., ge=36, le=132)
+    Duration: float = Field(..., ge=1, le=30)
+    Heart_Rate: float = Field(..., ge=67, le=128)
+    Gender: Literal["male", "female"]
 
+
+class PredictionResponse(BaseModel):
+    calories: float
 
 
 class WorkoutResponse(BaseModel):
-    id : int
-    Age : int
-    Height : float
-    Weight : float
-    Duration : float
-    Heart_Rate : float
-    Gender : str
-    Calories : float
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
-class PredictionResponse(BaseModel):
-    calories: float
+    id: int
+    Age: int
+    Height: float
+    Weight: float
+    Duration: float
+    Heart_Rate: float
+    Gender: str
+    Calories: float
+    created_at: datetime
