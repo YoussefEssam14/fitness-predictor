@@ -39,8 +39,8 @@ def root():
 def health():
     return {"status": "running"}
 
-@app.post("/predict", response_model=PredictionResponse)
-def predict(data: PredictionRequest):
+# a service function that can be used by other endpoints to run the prediction
+def run_prediction(data: PredictionRequest):
     input_df = pd.DataFrame([{
         "Age": data.Age,
         "Height": data.Height,
@@ -50,6 +50,16 @@ def predict(data: PredictionRequest):
         "Gender": data.Gender
     }])
     calories = float(model.predict(input_df)[0])
+    return calories
+@app.post("/predict", response_model=PredictionResponse)
+def predict(data: PredictionRequest):
+    calories = run_prediction(data)
+
+    if(not calories):
+        raise HTTPException(
+            status_code=400,
+            detail="Prediction failed"
+        )
     return {
         "calories" : round(calories,2)
     }
@@ -75,15 +85,7 @@ def save_workout(
     data: PredictionRequest,
     db : Session = Depends(get_db)
 ):
-    input_df = pd.DataFrame([{
-        "Age": data.Age,
-        "Height": data.Height,
-        "Weight": data.Weight,
-        "Duration": data.Duration,
-        "Heart_Rate": data.Heart_Rate,
-        "Gender": data.Gender
-        }])
-    calories = float(model.predict(input_df)[0])
+    calories = run_prediction(data)
     workout = Workout(
         Age = data.Age,
         Height = data.Height,
