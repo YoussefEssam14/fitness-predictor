@@ -1,0 +1,40 @@
+{
+  "trained_at": "2026-10-01T16:15:12",
+  "degree": 3,
+  "features": [
+    "Age",
+    "Height",
+    "Weight",
+    "Duration",
+    "Heart_Rate",
+    "Gender"
+  ],
+  "metrics": {
+    "MAE": 2.262025094807008,
+    "RMSE": 3.6750658082366865,
+    "R2": 0.9966534176082371
+  },
+  "training_ranges": {
+    "Age": [
+      20.0,
+      79.0
+    ],
+    "Height": [
+      123.0,
+      222.0
+    ],
+    "Weight": [
+      36.0,
+      132.0
+    ],
+    "Duration": [
+      1.0,
+      30.0
+    ],
+    "Heart_Rate": [
+      67.0,
+      128.0
+    ]
+  },
+  "n_train": 12000
+}
